@@ -10,7 +10,7 @@ import "github.com/klauspost/cld2/internal/info"
 
 // Detect returns the language code for detected language
 // in the given text.
-var Detect = func (text string) string { return UNKNOWN_LANGUAGE.Code() }
+var Detect = func(text string) string { return UNKNOWN_LANGUAGE.Code() }
 
 // DetectLang returns the language code for detected language
 // in the given text.
@@ -27,15 +27,15 @@ var DetectThree = func(text string) Languages { return Languages{} }
 var Enabled bool
 
 func infoToLanguages(in info.Languages) Languages {
-	res :=  Languages {
+	res := Languages{
 		TextBytes: in.TextBytes,
-		Reliable: in.Reliable,
+		Reliable:  in.Reliable,
 	}
 	for _, est := range in.Estimates {
 		if Language(est.Language) == UNKNOWN_LANGUAGE {
 			continue
 		}
-		res.Estimates = append(res.Estimates, Estimate{Language: Language(est.Language), NormScore: est.NormScore, Percent:est.Percent })
+		res.Estimates = append(res.Estimates, Estimate{Language: Language(est.Language), NormScore: est.NormScore, Percent: est.Percent})
 	}
 	return res
 }

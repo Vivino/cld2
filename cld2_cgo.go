@@ -24,4 +24,3 @@ func init() {
 	}
 	Enabled = true
 }
-
