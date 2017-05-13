@@ -15,6 +15,7 @@ go:
 
 script: 
  - go vet ./...
+ - go generate
  - go test -v .
  - env CGO_ENABLED=0 go test -v .
  - diff <(gofmt -d .) <("")
