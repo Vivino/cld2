@@ -3,7 +3,6 @@
 package cld2
 
 import (
-	"errors"
 	"fmt"
 	"log"
 	"os"
@@ -20,7 +19,7 @@ func init() {
 		if Enabled {
 			return nil
 		}
-		p, err := plugin.Open(paths[i])
+		p, err := plugin.Open(path)
 		if err != nil {
 			return err
 		}
@@ -32,7 +31,7 @@ func init() {
 		log.Printf("CLD2: Loading plugin: %v", err)
 		return
 	}
-	err := usePlugin(p)
+	err = usePlugin(p)
 	if err != nil {
 		log.Printf("CLD2: plugin init: %v", err)
 		return
@@ -74,6 +73,7 @@ func usePlugin(p *plugin.Plugin) error {
 		return infoToLanguages(dt(text))
 	}
 	Enabled = true
+	return nil
 }
 
 func findPlugin(paths ...string) (*plugin.Plugin, error) {
@@ -88,5 +88,5 @@ func findPlugin(paths ...string) (*plugin.Plugin, error) {
 			return p, nil
 		}
 	}
-	return nil, errors.New(fmt.Sprintf("cld2go.so could not be found in any of: %v", paths))
+	return nil, fmt.Errorf("cld2go.so could not be found in any of: %v", paths)
 }
