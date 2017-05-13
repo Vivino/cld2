@@ -16,7 +16,7 @@ import (
 //go:generate go build -buildmode=plugin -o lib/cld2go.so github.com/klauspost/cld2/internal/plugin
 
 func init() {
-	p, err := findPlugin("lib", ".", "/lib", filepath.Join(os.Getenv("GOPATH"), "src", "github.com", "klauspost", "cld2", "lib"))
+	p, err := findPlugin("/lib", "lib", ".", filepath.Join(os.Getenv("GOPATH"), "src", "github.com", "klauspost", "cld2", "lib"))
 	if err != nil {
 		log.Printf("CLD2: Error loading plugin: %v", err)
 		return
