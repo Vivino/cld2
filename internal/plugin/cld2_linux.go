@@ -1,4 +1,4 @@
-//+build linux
+//+build linux,go1.8
 
 package main
 
@@ -11,9 +11,11 @@ import (
 	"github.com/klauspost/cld2/internal/info"
 )
 
-// Detect returns the language code for detected language
-// in the given text.
-func Detect(text string) string {
+func main() {
+	panic("install me as plugin")
+}
+
+func PluginDetect(text string) string {
 	cs := C.CString(text)
 	res := C.DetectLang(cs, -1)
 	C.free(unsafe.Pointer(cs))
@@ -24,20 +26,14 @@ func Detect(text string) string {
 	return lang
 }
 
-// DetectLang returns the language code for detected language
-// in the given text.
-// ENGLISH is returned if the language cannot be detected.
-func DetectLang(text string) uint16 {
+func PluginDetectLang(text string) uint16 {
 	cs := C.CString(text)
 	res := C.DetectLangCode(cs, -1)
 	C.free(unsafe.Pointer(cs))
 	return uint16(res)
 }
 
-// DetectThree returns up to three language guesses.
-// Extended languages are enabled.
-// Unknown languages are removed from the resultset.
-func DetectThree(text string) info.Languages {
+func PluginDetectThree(text string) info.Languages {
 	cs := C.CString(text)
 	dst := new(C.struct__result)
 	C.DetectThree(dst, cs, -1)

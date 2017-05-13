@@ -10,18 +10,20 @@ import "github.com/klauspost/cld2/internal/info"
 
 // Detect returns the language code for detected language
 // in the given text.
-var Detect func (text string) string
+var Detect = func (text string) string { return UNKNOWN_LANGUAGE.Code() }
 
 // DetectLang returns the language code for detected language
 // in the given text.
 // ENGLISH is returned if the language cannot be detected.
-var DetectLang func(text string) Language
+var DetectLang = func(text string) Language { return UNKNOWN_LANGUAGE }
 
 // DetectThree returns up to three language guesses.
 // Extended languages are enabled.
 // Unknown languages are removed from the resultset.
-var DetectThree func(text string) Languages
+var DetectThree = func(text string) Languages { return Languages{} }
 
+// Enabled will be set to true if compiled with cgo, or plugin loaded
+// successfully
 var Enabled bool
 
 func infoToLanguages(in info.Languages) Languages {
