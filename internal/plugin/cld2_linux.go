@@ -52,3 +52,7 @@ func PluginDetectThree(text string) info.Languages {
 	}
 	return info.Languages{Estimates: res, Reliable: rel, TextBytes: int(dst.text_bytes)}
 }
+
+func PluginVersion() int {
+	return 1
+}
