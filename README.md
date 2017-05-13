@@ -1,6 +1,6 @@
 # cld2
---
-    import "cld2"
+
+[![Build Status](https://travis-ci.org/klauspost/cld2.svg?branch=master)](https://travis-ci.org/klauspost/cld2)
 
 Package cld2 implements language detection using the Compact Language Detector.
 
@@ -52,3 +52,21 @@ type Estimate struct {
 	NormScore float64
 }
 ```
+# cgo
+
+You can compile the package without cgo. It will return "Unknown Language" for all requests.
+
+The package level "Enabled" boolean can be checked to see if everything is expected to work.
+
+
+# Go 1.8+ plugin (Linux)
+
+This will use plugins on linux/amd64 to reduce compilation times.
+
+The plugin is provided pre-compiled as `lib/cld2go.so`. To recompile this, run `go generate` in this directory (cld2).
+
+On startup the package will attempt to load the plugin from `/lib`,  `./lib`, `.`, `$GOPATH$/src/github.com/klauspost/cld2/lib` (where it is provided). To specify a custom path, use `cld2.LoadPlugin("/some/path")`.
+
+`go generate` can be used to recompile plugin.
+
+This can be needed if you experience errors like: `plugin.Open: /usr/lib/x86_64-linux-gnu/libstdc++.so.6: version 'GLIBCXX_3.4.20' not found (required by /gopath/src/github.com/klauspost/cld2/lib/cld2go.so)`
