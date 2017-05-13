@@ -1,0 +1,19 @@
+os: Visual Studio 2015
+
+platform: x64
+
+clone_folder: c:\gopath\src\github.com\klauspost\cld2
+
+# environment variables
+environment:
+  GOPATH: c:\gopath
+
+install:
+  - echo %PATH%
+  - echo %GOPATH%
+  - go version
+  - go env
+  - go get -d ./...
+
+build_script:
+  - go test -v ./...
