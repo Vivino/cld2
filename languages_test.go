@@ -41,28 +41,3 @@ func TestLanguageFromID(t *testing.T) {
 	}
 }
 
-func TestLoadPlugin(t *testing.T) {
-	if !Enabled {
-		t.Skip("want to start enabled")
-		return
-	}
-	err := LoadPlugin("./lib/notfound.so")
-	if err != nil {
-		// We should never get error if enabled.
-		t.Error(err)
-	}
-	Enabled = false
-	err = LoadPlugin("lib/notfound.so")
-	if err == nil && err != ErrNoPlugins {
-		// We should get an error
-		t.Error(err)
-	}
-	err = LoadPlugin("lib/cld2go.so")
-	if err != nil && err != ErrNoPlugins {
-		// We should get an error
-		t.Fatal(err)
-	}
-	if !Enabled {
-		t.Error("We should have been enabled now.")
-	}
-}
