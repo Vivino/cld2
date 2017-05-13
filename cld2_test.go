@@ -170,8 +170,12 @@ func BenchmarkDetectThreeShort(b *testing.B) {
 
 func TestLoadPlugin(t *testing.T) {
 	if !Enabled {
-		t.Skip("want to start enabled")
-		return
+		err := LoadPlugin("lib/cld2go.so")
+		if err != nil && err != ErrNoPlugins {
+			// We should get an error
+			t.Fatal(err)
+		}
+		t.Skip("Did not start Enabled")
 	}
 	err := LoadPlugin("./lib/notfound.so")
 	if err != nil {

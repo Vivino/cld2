@@ -5,17 +5,17 @@ import "testing"
 func TestLanguageFromCode(t *testing.T) {
 	l := LanguageFromCode("da")
 	if l != DANISH {
-		t.Error("want 'da' code to return Danish, got %s", l.String())
+		t.Errorf("want 'da' code to return Danish, got %s", l.String())
 	}
 
 	l = LanguageFromCode("something")
 	if l != UNKNOWN_LANGUAGE {
-		t.Error("want 'something' code to return Unknown Language, got %s", l.String())
+		t.Errorf("want 'something' code to return Unknown Language, got %s", l.String())
 	}
 
 	l = LanguageFromCode("un")
 	if l != UNKNOWN_LANGUAGE {
-		t.Error("want 'something' code to return Unknown Language, got %s", l.String())
+		t.Errorf("want 'something' code to return Unknown Language, got %s", l.String())
 	}
 }
 
@@ -40,4 +40,3 @@ func TestLanguageFromID(t *testing.T) {
 		t.Errorf("want Unknown Language, got %v", l)
 	}
 }
-
