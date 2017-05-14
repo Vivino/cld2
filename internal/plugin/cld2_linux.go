@@ -1,4 +1,4 @@
-//+build linux,go1.8
+//+build linux,go1.8,cgo
 
 package main
 
