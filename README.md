@@ -8,6 +8,18 @@ This package includes the relevant sources from the cld2 project, so it doesn't
 require any external dependencies. For more information about CLD2, see
 https://code.google.com/p/cld2/.
 
+## Installation
+
+```
+go get -u github.com/klauspost/cld2
+```
+
+
+On Linux and Go 1.8+ this is also required:
+```
+go generate github.com/klauspost/cld2
+```
+
 ## Usage
 
 #### func  Detect
@@ -63,10 +75,9 @@ The package level "Enabled" boolean can be checked to see if everything is expec
 
 This will use plugins on linux/amd64 to reduce compilation times.
 
-The plugin is provided pre-compiled as `lib/cld2go.so`. To recompile this, run `go generate` in this directory (cld2).
+To recompile this, run `go generate` in this directory (cld2).
 
 On startup the package will attempt to load the plugin from `/lib`,  `./lib`, `.`, `$GOPATH$/src/github.com/klauspost/cld2/lib` (where it is provided). To specify a custom path, use `cld2.LoadPlugin("/some/path")`.
 
-`go generate` can be used to recompile plugin.
+`go generate github.com/klauspost/cld2` must be used to recompile plugin.
 
-This can be needed if you experience errors like: `plugin.Open: /usr/lib/x86_64-linux-gnu/libstdc++.so.6: version 'GLIBCXX_3.4.20' not found (required by /gopath/src/github.com/klauspost/cld2/lib/cld2go.so)`
