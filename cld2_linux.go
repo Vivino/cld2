@@ -81,12 +81,14 @@ func findPlugin(paths ...string) (*plugin.Plugin, error) {
 		var err error
 		paths[i], err = filepath.Abs(filepath.Join(path, "cld2go.so"))
 		if err != nil {
+			fmt.Fprintln(os.Stdout, "could not create absolute path for (%s): %v", path, err)
 			continue
 		}
 		p, err := plugin.Open(paths[i])
 		if err == nil {
 			return p, nil
 		}
+		fmt.Fprintln(os.Stdout, "did not find cld2go.so in path:", paths[i])
 	}
 	return nil, fmt.Errorf("cld2go.so could not be found in any of: %v", paths)
 }
