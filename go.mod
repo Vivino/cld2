@@ -1,3 +1,3 @@
-module github.com/klauspost/cld2
+module github.com/Vivino/cld2
 
 go 1.15

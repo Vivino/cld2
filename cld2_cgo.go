@@ -8,7 +8,7 @@
 // For more information about CLD2, see https://github.com/CLD2Owners/cld2
 package cld2
 
-import "github.com/klauspost/cld2/internal/plugin"
+import "github.com/Vivino/cld2/internal/plugin"
 
 func init() {
 	Detect = func(text string) string {

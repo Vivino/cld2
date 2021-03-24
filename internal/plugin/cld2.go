@@ -14,7 +14,7 @@ import "C"
 import (
 	"unsafe"
 
-	"github.com/klauspost/cld2/internal/info"
+	"github.com/Vivino/cld2/internal/info"
 )
 
 // Detect returns the language code for detected language

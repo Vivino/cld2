@@ -11,13 +11,13 @@ https://code.google.com/p/cld2/.
 ## Installation
 
 ```
-go get -u github.com/klauspost/cld2
+go get -u github.com/Vivino/cld2
 ```
 
 
 On Linux and Go 1.8+ this is also required:
 ```
-go generate github.com/klauspost/cld2
+go generate github.com/Vivino/cld2
 ```
 
 ## Usage
@@ -77,7 +77,7 @@ This will use plugins on linux/amd64 to reduce compilation times.
 
 To recompile this, run `go generate` in this directory (cld2).
 
-On startup the package will attempt to load the plugin from `/lib`,  `./lib`, `.`, `$GOPATH$/src/github.com/klauspost/cld2/lib` (where it is provided). To specify a custom path, use `cld2.LoadPlugin("/some/path")`.
+On startup the package will attempt to load the plugin from `/lib`,  `./lib`, `.`, `$GOPATH$/src/github.com/Vivino/cld2/lib` (where it is provided). To specify a custom path, use `cld2.LoadPlugin("/some/path")`.
 
-`go generate github.com/klauspost/cld2` must be used to recompile plugin.
+`go generate github.com/Vivino/cld2` must be used to recompile plugin.
 

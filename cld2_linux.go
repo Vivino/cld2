@@ -9,10 +9,10 @@ import (
 	"path/filepath"
 	"plugin"
 
-	"github.com/klauspost/cld2/internal/info"
+	"github.com/Vivino/cld2/internal/info"
 )
 
-//go:generate go build -buildmode=plugin -o lib/cld2go.so github.com/klauspost/cld2/internal/plugin
+//go:generate go build -buildmode=plugin -o lib/cld2go.so github.com/Vivino/cld2/internal/plugin
 
 func init() {
 	LoadPlugin = func(path string) error {
