@@ -2,7 +2,7 @@ os: Visual Studio 2015
 
 platform: x64
 
-clone_folder: c:\gopath\src\github.com\klauspost\cld2
+clone_folder: c:\gopath\src\github.com\Vivino\cld2
 
 # environment variables
 environment:
