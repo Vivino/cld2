@@ -88,7 +88,7 @@ func findPlugin(paths ...string) (*plugin.Plugin, error) {
 		if err == nil {
 			return p, nil
 		}
-		fmt.Fprintln(os.Stdout, "did not find cld2go.so in path:", paths[i])
+		fmt.Fprintln(os.Stdout, "did not find cld2go.so in path:", paths[i], err)
 	}
 	return nil, fmt.Errorf("cld2go.so could not be found in any of: %v", paths)
 }
