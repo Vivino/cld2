@@ -77,18 +77,22 @@ func usePlugin(p *plugin.Plugin) error {
 }
 
 func findPlugin(paths ...string) (*plugin.Plugin, error) {
+	if len(paths) == 0 {
+		return nil, fmt.Errorf("no paths specified for opening cld2go.so")
+	}
+	var errors bytes.Buffer
 	for i, path := range paths {
 		var err error
-		paths[i], err = filepath.Abs(filepath.Join(path, "cld2go.so"))
+		abspath, err = filepath.Abs(filepath.Join(path, "cld2go.so"))
 		if err != nil {
-			fmt.Fprintln(os.Stdout, "could not create absolute path for (%s): %v", path, err)
+			errors.WriteString("\n\tcould not create absolute path for (%s): %v", path, err)
 			continue
 		}
-		p, err := plugin.Open(paths[i])
+		p, err := plugin.Open(abspath)
 		if err == nil {
 			return p, nil
 		}
-		fmt.Fprintln(os.Stdout, "did not find cld2go.so in path:", paths[i], err)
+		errors.WriteString(fmt.Sprintf("\n\terror opening file (path: %s), error: (%v)", paths[i], err))
 	}
-	return nil, fmt.Errorf("cld2go.so could not be found in any of: %v", paths)
+	return nil, fmt.Errorf("could not open cld2go.so: ", errors.String())
 }
