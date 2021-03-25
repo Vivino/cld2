@@ -82,8 +82,7 @@ func findPlugin(paths ...string) (*plugin.Plugin, error) {
 	}
 	var errors bytes.Buffer
 	for i, path := range paths {
-		var err error
-		abspath, err = filepath.Abs(filepath.Join(path, "cld2go.so"))
+		abspath, err := filepath.Abs(filepath.Join(path, "cld2go.so"))
 		if err != nil {
 			errors.WriteString("\n\tcould not create absolute path for (%s): %v", path, err)
 			continue
