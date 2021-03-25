@@ -3,6 +3,7 @@
 package cld2
 
 import (
+	"bytes"
 	"fmt"
 	"log"
 	"os"
