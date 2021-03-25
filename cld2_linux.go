@@ -85,7 +85,7 @@ func findPlugin(paths ...string) (*plugin.Plugin, error) {
 	for i, path := range paths {
 		abspath, err := filepath.Abs(filepath.Join(path, "cld2go.so"))
 		if err != nil {
-			errors.WriteString("\n\tcould not create absolute path for (%s): %v", path, err)
+			errors.WriteString(fmt.Sprintf("\n\tcould not create absolute path for (%s): %v", path, err))
 			continue
 		}
 		p, err := plugin.Open(abspath)
