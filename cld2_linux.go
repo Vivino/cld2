@@ -20,7 +20,7 @@ func init() {
 		if Enabled {
 			return nil
 		}
-		p, err := findPlugin(paths)
+		p, err := findPlugin(paths...)
 		if err != nil {
 			return err
 		}
