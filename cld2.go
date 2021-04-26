@@ -33,7 +33,7 @@ var ErrNoPlugins = errors.New("CLD2: Architecture does not support plugins")
 // If support has been compiled into the binary calling this will have no effect.
 // If binary was compiled without CGO and platform does not support plugins ErrNoPlugins
 // will be returned.
-var LoadPlugin = func(path string) error {
+var LoadPlugin = func(paths ...string) error {
 	if Enabled {
 		return nil
 	}

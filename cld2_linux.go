@@ -16,16 +16,15 @@ import (
 //go:generate go build -buildmode=plugin -o lib/cld2go.so github.com/Vivino/cld2/internal/plugin
 
 func init() {
-	LoadPlugin = func(path string) error {
+	LoadPlugin = func(paths ...string) error {
 		if Enabled {
 			return nil
 		}
-		p, err := plugin.Open(path)
+		p, err := findPlugin(paths)
 		if err != nil {
 			return err
 		}
 		return usePlugin(p)
-
 	}
 	p, err := findPlugin("./lib", "/lib", "lib", ".", filepath.Join(os.Getenv("GOPATH"), "src", "github.com", "Vivino", "cld2", "lib"))
 	if err != nil {
