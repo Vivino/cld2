@@ -50,7 +50,7 @@ func DetectThree(text string) info.Languages {
 	C.free(unsafe.Pointer(cs))
 	res := make([]info.Estimate, 0, 3)
 	for i := range dst.language {
-		var est info.Estimate
+		var est info.EstimateImpl
 		est.Language = uint16(dst.language[i])
 		est.Percent = int(dst.percent[i])
 		est.NormScore = float64(dst.normalized_score[i])
@@ -60,5 +60,5 @@ func DetectThree(text string) info.Languages {
 	if dst.reliable == 0 {
 		rel = false
 	}
-	return info.Languages{Estimates: res, Reliable: rel, TextBytes: int(dst.text_bytes)}
+	return info.LanguagesImpl{Estimates: res, Reliable: rel, TextBytes: int(dst.text_bytes)}
 }

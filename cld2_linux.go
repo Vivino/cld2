@@ -9,8 +9,6 @@ import (
 	"os"
 	"path/filepath"
 	"plugin"
-
-	"github.com/Vivino/cld2/internal/info"
 )
 
 //go:generate go build -buildmode=plugin -o lib/cld2go.so github.com/Vivino/cld2/internal/plugin
@@ -58,7 +56,7 @@ func usePlugin(p *plugin.Plugin) error {
 		return fmt.Errorf("PluginDetectLang: wrong signature: %T", f)
 	}
 	DetectLang = func(text string) Language {
-		return Language(dl(text))
+		return LanguageImpl(dl(text))
 	}
 
 	f, err = p.Lookup("PluginDetectThree")
