@@ -1,40 +1,34 @@
 package info
 
-type Languages interface {
-	GetEstimates() []Estimate
-	GetTextBytes() int
-	GetReliable() bool
-}
-
-type Estimate interface {
-	GetLanguage() uint16
-	GetPercent() int
-	GetNormScore() float64
-}
+import models "github.com/Pungyeon/tmp-models/src/cld2"
 
 // Languages are probable languages of the supplied text
-type LanguagesImpl struct {
+type Languages struct {
 	Estimates []Estimate // Possible languages returned in order of confidence
 	TextBytes int        // the amount of non-tag/letters-only text found
 	Reliable  bool       // Does CLD2 see the result as reliable?
 }
 
-func (l LanguagesImpl) GetEstimates() []Estimate {
-	return l.Estimates
+func (l Languages) GetEstimates() []models.IEstimate {
+	estimates := make([]models.IEstimate, len(l.Estimates))
+	for i := range l.Estimates {
+		estimates[i] = l.Estimates[i]
+	}
+	return estimates
 }
 
-func (l LanguagesImpl) GetTextBytes() int {
+func (l Languages) GetTextBytes() int {
 	return l.TextBytes
 }
 
-func (l LanguagesImpl) GetReliable() bool {
+func (l Languages) GetReliable() bool {
 	return l.Reliable
 }
 
-var _ Languages = LanguagesImpl{}
+var _ models.ILanguages = Languages{}
 
 // Single Language estimate
-type EstimateImpl struct {
+type Estimate struct {
 	Language uint16
 	Percent  int // text percentage 0..100 of the top 3 languages.
 
@@ -44,16 +38,16 @@ type EstimateImpl struct {
 	NormScore float64
 }
 
-func (e EstimateImpl) GetLanguage() uint16 {
+func (e Estimate) GetLanguage() uint16 {
 	return e.Language
 }
 
-func (e EstimateImpl) GetPercent() int {
+func (e Estimate) GetPercent() int {
 	return e.Percent
 }
 
-func (e EstimateImpl) GetNormScore() float64 {
+func (e Estimate) GetNormScore() float64 {
 	return e.NormScore
 }
 
-var _ Estimate = EstimateImpl{}
+var _ models.IEstimate = Estimate{}

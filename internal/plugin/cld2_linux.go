@@ -8,6 +8,7 @@ import "C"
 import (
 	"unsafe"
 
+	models "github.com/Pungyeon/tmp-models/src/cld2"
 	"github.com/Vivino/cld2/internal/info"
 )
 
@@ -33,14 +34,14 @@ func PluginDetectLang(text string) uint16 {
 	return uint16(res)
 }
 
-func PluginDetectThree(text string) info.Languages {
+func PluginDetectThree(text string) models.ILanguages {
 	cs := C.CString(text)
 	dst := new(C.struct__result)
 	C.DetectThree(dst, cs, -1)
 	C.free(unsafe.Pointer(cs))
 	res := make([]info.Estimate, 0, 3)
 	for i := range dst.language {
-		var est info.EstimateImpl
+		var est info.Estimate
 		est.Language = uint16(dst.language[i])
 		est.Percent = int(dst.percent[i])
 		est.NormScore = float64(dst.normalized_score[i])
@@ -50,7 +51,7 @@ func PluginDetectThree(text string) info.Languages {
 	if dst.reliable == 0 {
 		rel = false
 	}
-	return info.LanguagesImpl{Estimates: res, Reliable: rel, TextBytes: int(dst.text_bytes)}
+	return info.Languages{Estimates: res, Reliable: rel, TextBytes: int(dst.text_bytes)}
 }
 
 func PluginVersion() int {
