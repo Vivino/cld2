@@ -8,9 +8,8 @@ package cld2
 
 import (
 	"errors"
-	"github.com/Vivino/cld2/internal/info"
 
-	models "github.com/Pungyeon/tmp-models/src/cld2"
+	"github.com/Vivino/cld2/internal/info"
 )
 
 // Detect returns the language code for detected language
@@ -20,12 +19,12 @@ var Detect = func(text string) string { return UNKNOWN_LANGUAGE.Code() }
 // DetectLang returns the language code for detected language
 // in the given text.
 // ENGLISH is returned if the language cannot be detected.
-var DetectLang = func(text string) models.ILanguage { return UNKNOWN_LANGUAGE }
+var DetectLang = func(text string) Language { return UNKNOWN_LANGUAGE }
 
 // DetectThree returns up to three language guesses.
 // Extended languages are enabled.
-// Unknown languages are removed from the result set.
-var DetectThree = func(text string) models.ILanguages { return Languages{} }
+// Unknown languages are removed from the resultset.
+var DetectThree = func(text string) Languages { return Languages{} }
 
 // ErrNoPlugins is returned if attempting to load plugin on non-supported platform.
 var ErrNoPlugins = errors.New("CLD2: Architecture does not support plugins")
@@ -58,24 +57,3 @@ func infoToLanguages(in info.Languages) Languages {
 	}
 	return res
 }
-
-// Languages are probable languages of the supplied text
-type Languages struct {
-	Estimates []models.IEstimate // Possible languages returned in order of confidence
-	TextBytes int        // the amount of non-tag/letters-only text found
-	Reliable  bool       // Does CLD2 see the result as reliable?
-}
-
-func (l Languages) GetEstimates() []models.IEstimate {
-	return l.Estimates
-}
-
-func (l Languages) GetTextBytes() int {
-	return l.TextBytes
-}
-
-func (l Languages) GetReliable() bool {
-	return l.Reliable
-}
-
-var _ models.ILanguages = Languages{}

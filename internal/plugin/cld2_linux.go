@@ -8,7 +8,6 @@ import "C"
 import (
 	"unsafe"
 
-	models "github.com/Pungyeon/tmp-models/src/cld2"
 	"github.com/Vivino/cld2/internal/info"
 )
 
@@ -34,7 +33,7 @@ func PluginDetectLang(text string) uint16 {
 	return uint16(res)
 }
 
-func PluginDetectThree(text string) models.ILanguages {
+func PluginDetectThree(text string) interface{} {
 	cs := C.CString(text)
 	dst := new(C.struct__result)
 	C.DetectThree(dst, cs, -1)
