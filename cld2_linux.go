@@ -56,14 +56,14 @@ func usePlugin(p *plugin.Plugin) error {
 		return fmt.Errorf("PluginDetectLang: wrong signature: %T", f)
 	}
 	DetectLang = func(text string) Language {
-		return LanguageImpl(dl(text))
+		return Language(dl(text))
 	}
 
 	f, err = p.Lookup("PluginDetectThree")
 	if err != nil {
 		return err
 	}
-	dt, ok := f.(func(text string) info.Languages)
+	dt, ok := f.(func(text string) Languages)
 	if !ok {
 		return fmt.Errorf("PluginDetectThree: wrong signature: %T", f)
 	}
