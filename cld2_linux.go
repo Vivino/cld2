@@ -9,6 +9,9 @@ import (
 	"os"
 	"path/filepath"
 	"plugin"
+	"strings"
+	"errors"
+	"reflect"
 )
 
 //go:generate go build -buildmode=plugin -o lib/cld2go.so github.com/Vivino/cld2/internal/plugin
@@ -63,12 +66,17 @@ func usePlugin(p *plugin.Plugin) error {
 	if err != nil {
 		return err
 	}
-	dt, ok := f.(func(text string) Languages)
+	dt, ok := f.(func(text string) interface{})
 	if !ok {
 		return fmt.Errorf("PluginDetectThree: wrong signature: %T", f)
 	}
 	DetectThree = func(text string) Languages {
-		return infoToLanguages(dt(text))
+		l, err := parseLanguage(dt(text))
+		if err != nil {
+			log.Println(err)
+			return Languages{}
+		}
+		return l
 	}
 	Enabled = true
 	return nil
@@ -80,9 +88,9 @@ func findPlugin(paths ...string) (*plugin.Plugin, error) {
 	}
 	var errors bytes.Buffer
 	for i, path := range paths {
-		abspath, err := filepath.Abs(filepath.Join(path, "cld2go.so"))
+		abspath, err := getAbsoluteCLD2Path(path)
 		if err != nil {
-			errors.WriteString(fmt.Sprintf("\n\tcould not create absolute path for (%s): %v", path, err))
+			errors.WriteString(err.Error())
 			continue
 		}
 		p, err := plugin.Open(abspath)
@@ -91,5 +99,107 @@ func findPlugin(paths ...string) (*plugin.Plugin, error) {
 		}
 		errors.WriteString(fmt.Sprintf("\n\terror opening file (path: %s), error: (%v)", paths[i], err))
 	}
-	return nil, fmt.Errorf("could not open cld2go.so: ", errors.String())
+	return nil, fmt.Errorf("could not open cld2go.so: %s", errors.String())
+}
+
+func getAbsoluteCLD2Path(path string) (string, error) {
+	if !strings.Contains(path, "cld2go.so") {
+		abspath, err := filepath.Abs(filepath.Join(path, "cld2go.so"))
+		if err != nil {
+			return "", fmt.Errorf("\n\tcould not create absolute path for (%s): %v", path, err)
+		}
+		return abspath, nil
+	}
+	return path, nil
+}
+
+
+func parseLanguage(v interface{}) (Languages, error) {
+	val := reflect.ValueOf(v)
+
+	reliable := val.FieldByName("Reliable")
+	if reliable.Kind() != reflect.Bool {
+		return Languages{}, NewParseError("Reliable", reflect.Bool, reliable.Kind())
+	}
+
+	textBytes := val.FieldByName("TextBytes")
+	if textBytes.Kind() != reflect.Int {
+		return Languages{}, NewParseError("TextBytes", reflect.Int, textBytes.Kind())
+	}
+
+	estimates, err := parseEstimates(val.FieldByName("Estimates"))
+	if err != nil {
+		return Languages{}, err
+	}
+
+	return Languages{
+		Estimates: estimates,
+		TextBytes: int(textBytes.Int()),
+		Reliable:  reliable.Bool(),
+	}, nil
+}
+
+func parseEstimates(value reflect.Value) ([]Estimate, error) {
+	if value.Kind() != reflect.Array && value.Kind() != reflect.Slice {
+		return nil, NewParseError("Estimates", reflect.Slice, value.Kind())
+	}
+	estimates := []Estimate{}
+	for i := 0; i < value.Len(); i++ {
+		estimate, err := parseEstimate(value.Index(i))
+		if err != nil {
+			return nil, err
+		}
+		if estimate.Language != UNKNOWN_LANGUAGE {
+			estimates = append(estimates, estimate)
+		}
+	}
+	return estimates, nil
+}
+
+func parseEstimate(value reflect.Value) (Estimate, error) {
+	language := value.FieldByName("Language")
+	if language.Kind() != reflect.Uint16 {
+		return Estimate{}, NewParseError("Language", reflect.Uint16, language.Kind())
+	}
+	percent := value.FieldByName("Percent")
+	if percent.Kind() != reflect.Int {
+		return Estimate{}, NewParseError("Percent", reflect.Int, percent.Kind())
+	}
+	normScore := value.FieldByName("NormScore")
+	if normScore.Kind() != reflect.Float64 {
+		return Estimate{}, NewParseError("NormScore", reflect.Float64, normScore.Kind())
+	}
+	return Estimate{
+		Language:  Language(language.Uint()),
+		Percent:   int(percent.Int()),
+		NormScore: normScore.Float(),
+	}, nil
+}
+
+// ErrCLD2ParseError represents an error of unexpected output from cld2
+var ErrCLD2ParseError = errors.New("could not parse cld2 output")
+
+// ParseError represents the details of a parsing error
+type ParseError struct {
+	err     error
+	details string
+}
+
+// Error returns the details of the parsing error in the form of string
+func (err ParseError) Error() string {
+	return fmt.Sprintf("%v: %v", err.err, err.details)
+}
+
+// Unwrap returns the inner error of the ParseError structure
+func (err ParseError) Unwrap() error {
+	return err.err
+}
+
+// NewParseError instatiates and returns a new ParseError
+func NewParseError(property string, expected, actual reflect.Kind) error {
+	return ParseError{
+		err: ErrCLD2ParseError,
+		details: fmt.Sprintf("unexpected type for property %v: (expected: %v) (actual: %v)",
+			property, expected, actual),
+	}
 }
