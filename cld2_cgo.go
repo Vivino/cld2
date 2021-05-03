@@ -8,7 +8,10 @@
 // For more information about CLD2, see https://github.com/CLD2Owners/cld2
 package cld2
 
-import "github.com/Vivino/cld2/internal/plugin"
+import (
+	"github.com/Vivino/cld2/internal/info"
+	"github.com/Vivino/cld2/internal/plugin"
+)
 
 func init() {
 	Detect = func(text string) string {
@@ -20,7 +23,7 @@ func init() {
 	}
 
 	DetectThree = func(text string) Languages {
-		return infoToLanguages(cld2plugin.DetectThree(text))
+		return infoToLanguages(cld2plugin.DetectThree(text).(info.Languages))
 	}
 	Enabled = true
 }
