@@ -20,6 +20,13 @@ Til gengæld ser han fremmedkrigerne som en stor trussel mod alle EU-lande.
 - Det tror jeg på grund af det vanvittigt høje antal folk, der er draget af sted til Syrien og Irak, og som er kommet tilbage igen.
 De hjemvendte er ifølge forskeren yngre end før set, og de vender hjem med 'et forstyrret billede af, hvad vold er, og hvad vold kan bruges til'.`
 
+func TestMain(t *testing.M) {
+	if err := LoadPlugin("./lib"); err != nil {
+		panic(err)
+	}
+	t.Run()
+}
+
 func TestDetect(t *testing.T) {
 	lang := Detect(dkText)
 	if lang != "da" {

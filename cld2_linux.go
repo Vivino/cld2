@@ -6,7 +6,6 @@ import (
 	"bytes"
 	"fmt"
 	"log"
-	"os"
 	"path/filepath"
 	"plugin"
 	"strings"
@@ -26,16 +25,6 @@ func init() {
 			return err
 		}
 		return usePlugin(p)
-	}
-	p, err := findPlugin("./lib", "/lib", "lib", ".", filepath.Join(os.Getenv("GOPATH"), "src", "github.com", "Vivino", "cld2", "lib"))
-	if err != nil {
-		log.Printf("CLD2: Loading plugin: %v", err)
-		return
-	}
-	err = usePlugin(p)
-	if err != nil {
-		log.Printf("CLD2: plugin init: %v", err)
-		return
 	}
 }
 
