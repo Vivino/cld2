@@ -1,4 +1,4 @@
-//+build !cld2_disable,cgo,!linux linux,!go1.8,cgo linux,go1.8,!amd64
+//+build !cld2_disable,cgo,!linux,!darwin darwin,linux,!go1.8,cgo darwin,linux,go1.8,!amd64
 
 // Package cld2 implements language detection using the
 // Compact Language Detector.
@@ -9,8 +9,8 @@
 package cld2
 
 import (
+	"github.com/Vivino/cld2/internal/cld2plugin"
 	"github.com/Vivino/cld2/internal/info"
-	"github.com/Vivino/cld2/internal/plugin"
 )
 
 func init() {
