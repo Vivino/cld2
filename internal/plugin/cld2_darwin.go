@@ -1,12 +1,6 @@
-//+build cgo,!darwin,!linux cgo,linux,!go1.8
+//+build darwin,go1.8,cgo
 
-// Package cld2 implements language detection using the
-// Compact Language Detector.
-//
-// This package includes the relevant sources from the cld2
-// project, so it doesn't require any external dependencies.
-// For more information about CLD2, see https://github.com/CLD2Owners/cld2
-package cld2plugin
+package main
 
 // #include <stdlib.h>
 // #include "cld2.h"
@@ -17,9 +11,11 @@ import (
 	"github.com/Vivino/cld2/internal/info"
 )
 
-// Detect returns the language code for detected language
-// in the given text.
-func Detect(text string) string {
+func main() {
+	panic("install me as plugin")
+}
+
+func PluginDetect(text string) string {
 	cs := C.CString(text)
 	res := C.DetectLang(cs, -1)
 	C.free(unsafe.Pointer(cs))
@@ -30,20 +26,14 @@ func Detect(text string) string {
 	return lang
 }
 
-// DetectLang returns the language code for detected language
-// in the given text.
-// ENGLISH is returned if the language cannot be detected.
-func DetectLang(text string) uint16 {
+func PluginDetectLang(text string) uint16 {
 	cs := C.CString(text)
 	res := C.DetectLangCode(cs, -1)
 	C.free(unsafe.Pointer(cs))
 	return uint16(res)
 }
 
-// DetectThree returns up to three language guesses.
-// Extended languages are enabled.
-// Unknown languages are removed from the resultset.
-func DetectThree(text string) interface{} {
+func PluginDetectThree(text string) interface{} {
 	cs := C.CString(text)
 	dst := new(C.struct__result)
 	C.DetectThree(dst, cs, -1)
@@ -61,4 +51,8 @@ func DetectThree(text string) interface{} {
 		rel = false
 	}
 	return info.Languages{Estimates: res, Reliable: rel, TextBytes: int(dst.text_bytes)}
+}
+
+func PluginVersion() int {
+	return 1
 }
