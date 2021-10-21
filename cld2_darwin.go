@@ -1,4 +1,4 @@
-//+build darwin,go1.8,amd64
+//+build darwin,go1.8,amd64, darwin,go1.8,arm64
 
 package cld2
 
@@ -101,7 +101,6 @@ func getAbsoluteCLD2Path(path string) (string, error) {
 	}
 	return path, nil
 }
-
 
 func parseLanguage(v interface{}) (Languages, error) {
 	val := reflect.ValueOf(v)
