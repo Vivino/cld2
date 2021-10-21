@@ -1,4 +1,4 @@
-//+build darwin,go1.8,amd64, darwin,go1.8,arm64
+//+build darwin,go1.8,amd64 darwin,go1.8,arm64
 
 package cld2
 
